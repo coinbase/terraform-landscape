@@ -36,6 +36,11 @@ module TerraformLandscape
       # Remove preface
       if (match = scrubbed_output.match(/^Path:[^\n]+/))
         scrubbed_output = scrubbed_output[match.end(0)..-1]
+      elsif (match = scrubbed_output.match(/^(~|\+|\-)/))
+        scrubbed_output = scrubbed_output[match.begin(0)..-1]
+      elsif scrubbed_output.match(/^No changes/)
+        @output.puts 'No changes'
+        return
       else
         raise ParseError, 'Output does not contain proper preface'
       end
