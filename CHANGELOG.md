@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.1.0
 
 * Don't require `-out` flag on Terraform command
 * Fix handling of Terraform output with no changes
