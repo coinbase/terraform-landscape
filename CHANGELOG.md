@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## 0.1.1
+
+* Fix handling of resources with no attributes
+
 ## 0.1.0
 
 * Don't require `-out` flag on Terraform command
