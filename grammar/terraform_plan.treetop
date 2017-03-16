@@ -29,6 +29,12 @@ grammar TerraformPlan
         header.to_ast.merge(attributes: attrs.to_ast)
       end
     }
+    /
+    header:resource_header "\n" {
+      def to_ast
+        header.to_ast.merge(attributes: {})
+      end
+    }
   end
 
   rule resource_header
