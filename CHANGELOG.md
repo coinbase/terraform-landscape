@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.1.1
 
 * Fix handling of resources with no attributes
 
