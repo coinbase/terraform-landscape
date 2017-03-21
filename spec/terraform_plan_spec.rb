@@ -70,6 +70,24 @@ describe TerraformLandscape::TerraformPlan do
       OUT
     end
 
+    context 'when output contains a rebuilt resource' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+          -/+ random_id.abc (tainted)
+              b64:         "e20SLHAH5CXBCw" => "<computed>"
+              b64_std:     "e20SLHAH5CXBCw==" => "<computed>"
+              b64_url:     "e20SLHAH5CXBCw" => "<computed>"
+
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+        -/+ random_id.abc (tainted)
+            b64:       "e20SLHAH5CXBCw" => "<computed>"
+            b64_std:   "e20SLHAH5CXBCw==" => "<computed>"
+            b64_url:   "e20SLHAH5CXBCw" => "<computed>"
+
+      OUT
+    end
+
     context 'when output contains multiple modified resources' do
       let(:terraform_output) { normalize_indent(<<-TXT) }
         ~ some_resource_type.some_resource_name

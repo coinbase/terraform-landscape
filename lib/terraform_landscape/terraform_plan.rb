@@ -17,7 +17,8 @@ class TerraformLandscape::TerraformPlan
   CHANGE_SYMBOL_TO_COLOR = {
     :~ => :yellow,
     :- => :red,
-    :+ => :green
+    :+ => :green,
+    :'-/+' => :yellow
   }.freeze
 
   DEFAULT_DIFF_CONTEXT_LINES = 5
@@ -62,8 +63,11 @@ class TerraformLandscape::TerraformPlan
   def display_resource(resource)
     change_color = CHANGE_SYMBOL_TO_COLOR[resource[:change]]
 
-    @out.puts "#{resource[:change]} #{resource[:resource_type]}." \
-              "#{resource[:resource_name]}".colorize(change_color)
+    resource_header = "#{resource[:change]} #{resource[:resource_type]}." \
+                      "#{resource[:resource_name]}".colorize(change_color)
+    resource_header += " (#{resource[:reason]})" if resource[:reason]
+
+    @out.puts resource_header
 
     # Determine longest attribute name so we align all values at same indentation
     attribute_value_indent_amount = attribute_indent_amount_for_resource(resource)
@@ -115,7 +119,7 @@ class TerraformLandscape::TerraformPlan
   )
     attribute_value_indent = ' ' * attribute_value_indent_amount
 
-    if resource[:change] == :~
+    if [:~, :'-/+'].include?(resource[:change])
       display_modified_attribute(change_color,
                                  attribute_name,
                                  attribute_value,
