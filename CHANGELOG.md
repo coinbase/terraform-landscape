@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.1.2
 
 * Fix handling of rebuilt/tainted resources
 
