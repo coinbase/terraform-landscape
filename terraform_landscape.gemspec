@@ -5,7 +5,7 @@ require 'terraform_landscape/version'
 Gem::Specification.new do |s|
   s.name                  = 'terraform_landscape'
   s.version               = TerraformLandscape::VERSION
-  s.license               = 'Apache 2.0'
+  s.license               = 'Apache-2.0'
   s.summary               = 'Pretty-print Terraform plan output'
   s.description           = 'Improve output of Terraform plans with color and indentation'
   s.authors               = ['Coinbase', 'Shane da Silva']
