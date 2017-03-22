@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## 0.1.2
+
+* Fix handling of rebuilt/tainted resources
+
 ## 0.1.1
 
 * Fix handling of resources with no attributes
