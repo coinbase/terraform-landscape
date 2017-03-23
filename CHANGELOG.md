@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.1.3
 
 * Fix handling of resources rebuilt due to attribute changes with
   `(forces new resource)` in output
