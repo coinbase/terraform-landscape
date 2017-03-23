@@ -88,6 +88,22 @@ describe TerraformLandscape::TerraformPlan do
       OUT
     end
 
+    context 'when output contains an attribute change forcing a rebuild' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+        -/+ template_file.demo
+            rendered: "" => "<computed>"
+            template: "" => "<computed>" (forces new resource)
+
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+        -/+ template_file.demo
+            rendered:   "" => "<computed>"
+            template:   "" => "<computed>" (forces new resource)
+
+      OUT
+    end
+
     context 'when output contains multiple modified resources' do
       let(:terraform_output) { normalize_indent(<<-TXT) }
         ~ some_resource_type.some_resource_name

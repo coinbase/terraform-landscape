@@ -1,5 +1,10 @@
 # Terraform Landscape Change Log
 
+## 0.1.3
+
+* Fix handling of resources rebuilt due to attribute changes with
+  `(forces new resource)` in output
+
 ## 0.1.2
 
 * Fix handling of rebuilt/tainted resources

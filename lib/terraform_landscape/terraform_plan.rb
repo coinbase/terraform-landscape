@@ -65,7 +65,7 @@ class TerraformLandscape::TerraformPlan
 
     resource_header = "#{resource[:change]} #{resource[:resource_type]}." \
                       "#{resource[:resource_name]}".colorize(change_color)
-    resource_header += " (#{resource[:reason]})" if resource[:reason]
+    resource_header += " (#{resource[:reason]})".colorize(:magenta) if resource[:reason]
 
     @out.puts resource_header
 
@@ -141,6 +141,14 @@ class TerraformLandscape::TerraformPlan
     attribute_value_indent,
     attribute_value_indent_amount
   )
+    # Handle case where attribute has an annotation (e.g. "forces new resource")
+    # appended onto the end. This is hard to parse in the Treetop grammar, so we
+    # instead catch it here and extract
+    if match = attribute_value.match(/\((?<reason>[^)]+)\)$/)
+      reason = match['reason']
+      attribute_value = attribute_value[0...match.begin(0)]
+    end
+
     # Since the attribute line is always of the form
     # "old value" => "new value", we can add curly braces and parse with
     # `eval` to obtain a hash with a single key/value.
@@ -165,6 +173,8 @@ class TerraformLandscape::TerraformPlan
       @out.print ' => '.colorize(:light_black)
       @out.print '"' + new.colorize(:green) + '"'
     end
+
+    @out.print " (#{reason})".colorize(:magenta) if reason
 
     @out.newline
   end
