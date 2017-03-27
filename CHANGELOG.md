@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## master (unreleased)
+
+* Fix handling of repeated resources with index numbers
+
 ## 0.1.3
 
 * Fix handling of resources rebuilt due to attribute changes with
