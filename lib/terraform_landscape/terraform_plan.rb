@@ -94,6 +94,9 @@ class TerraformLandscape::TerraformPlan
   end
 
   def to_pretty_json(value)
+    # Can't JSON.parse an empty string, so handle it separately
+    return '' if value.strip.empty?
+
     JSON.pretty_generate(JSON.parse(value),
                          {
                            indent: '  ',

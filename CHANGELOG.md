@@ -3,6 +3,7 @@
 ## master (unreleased)
 
 * Fix handling of repeated resources with index numbers
+* Fix changing resource attributes from empty string to JSON
 
 ## 0.1.3
 
