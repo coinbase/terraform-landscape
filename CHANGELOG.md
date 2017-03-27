@@ -1,5 +1,11 @@
 # Terraform Landscape Change Log
 
+## 0.1.4
+
+* Fix handling of repeated resources with index numbers
+* Fix changing resource attributes from empty string to JSON
+* Fix handling of consecutive resources with no attributes
+
 ## 0.1.3
 
 * Fix handling of resources rebuilt due to attribute changes with

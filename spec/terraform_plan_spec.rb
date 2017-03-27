@@ -41,6 +41,18 @@ describe TerraformLandscape::TerraformPlan do
       OUT
     end
 
+    context 'when output contains a resource with an index number' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+        + some_resource_type.some_resource_name.0
+
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+        + some_resource_type.some_resource_name.0
+
+      OUT
+    end
+
     context 'when output contains a single resource with no attributes' do
       let(:terraform_output) { normalize_indent(<<-TXT) }
         - some_resource_type.some_resource_name
@@ -49,6 +61,22 @@ describe TerraformLandscape::TerraformPlan do
 
       it { should == normalize_indent(<<-OUT) }
         - some_resource_type.some_resource_name
+
+      OUT
+    end
+
+    context 'when output contains a multiple resources with no attributes' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+        + some_resource_type.some_resource_name
+
+        + some_resource_type.some_resource_name
+
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+        + some_resource_type.some_resource_name
+
+        + some_resource_type.some_resource_name
 
       OUT
     end
