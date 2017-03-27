@@ -30,7 +30,7 @@ grammar TerraformPlan
       end
     }
     /
-    header:resource_header "\n" {
+    header:resource_header {
       def to_ast
         header.to_ast.merge(attributes: {})
       end

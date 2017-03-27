@@ -4,6 +4,7 @@
 
 * Fix handling of repeated resources with index numbers
 * Fix changing resource attributes from empty string to JSON
+* Fix handling of consecutive resources with no attributes
 
 ## 0.1.3
 
