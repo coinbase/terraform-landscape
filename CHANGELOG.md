@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## 0.1.5
+
+* Fix handling of Windows line endings
+
 ## 0.1.4
 
 * Fix handling of repeated resources with index numbers
