@@ -27,6 +27,9 @@ class TerraformLandscape::TerraformPlan
 
   class << self
     def from_output(string)
+      # Our grammar assumes output with Unix line endings
+      string = string.gsub("\r\n", "\n")
+
       return new([]) if string.strip.empty?
       tree = parser.parse(string)
       raise ParseError, parser.failure_reason unless tree
