@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.1.6
 
 * Fix handling of read action resources (`<=`)
 
