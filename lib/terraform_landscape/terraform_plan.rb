@@ -18,7 +18,8 @@ class TerraformLandscape::TerraformPlan
     :~ => :yellow,
     :- => :red,
     :+ => :green,
-    :'-/+' => :yellow
+    :'-/+' => :yellow,
+    :'<=' => :cyan
   }.freeze
 
   DEFAULT_DIFF_CONTEXT_LINES = 5

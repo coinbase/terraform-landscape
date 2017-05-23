@@ -38,7 +38,7 @@ grammar TerraformPlan
   end
 
   rule resource_header
-    change:('~' / '-/+' / '-' / '+') _ type:[a-zA-Z0-9_-]+ '.' name:[\S]+ _ '(' reason:[^)]+ ')' {
+    change:('~' / '-/+' / '-' / '+' / '<=') _ type:[a-zA-Z0-9_-]+ '.' name:[\S]+ _ '(' reason:[^)]+ ')' {
       def to_ast
         {
           change: change.text_value.to_sym,
@@ -49,7 +49,7 @@ grammar TerraformPlan
       end
     }
     /
-    change:('~' / '-/+' / '-' / '+') _ type:[a-zA-Z0-9_-]+ '.' name:[\S]+ {
+    change:('~' / '-/+' / '-' / '+' / '<=') _ type:[a-zA-Z0-9_-]+ '.' name:[\S]+ {
       def to_ast
         {
           change: change.text_value.to_sym,
