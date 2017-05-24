@@ -130,6 +130,28 @@ describe TerraformLandscape::TerraformPlan do
       OUT
     end
 
+    context 'when output contains a resource read action' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+        <= data.external.ext
+            program.#: "2"
+            program.0: "echo"
+            program.1: "hello"
+            query.%:   "<computed>"
+            result.%:  "<computed>"
+
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+        <= data.external.ext
+            program.#:   "2"
+            program.0:   "echo"
+            program.1:   "hello"
+            query.%:     "<computed>"
+            result.%:    "<computed>"
+
+      OUT
+    end
+
     context 'when output contains an attribute change forcing a rebuild' do
       let(:terraform_output) { normalize_indent(<<-TXT) }
         -/+ template_file.demo

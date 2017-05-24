@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## 0.1.6
+
+* Fix handling of read action resources (`<=`)
+
 ## 0.1.5
 
 * Fix handling of Windows line endings
