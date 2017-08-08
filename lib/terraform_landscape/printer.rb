@@ -30,7 +30,10 @@ module TerraformLandscape
         io.close
       end
 
-      plan_output = buffer.string
+      process_string(buffer.string)
+    end
+
+    def process_string(plan_output)
       scrubbed_output = plan_output.gsub(/\e\[\d+m/, '')
 
       # Remove preface
@@ -50,7 +53,7 @@ module TerraformLandscape
         plan_summary = scrubbed_output[match.begin(0)..match.end(0)]
         scrubbed_output = scrubbed_output[0...match.begin(0)]
       else
-        raise ParseError, 'Output does not container proper postface'
+        # No matching postface, so ignore
       end
 
       plan = TerraformPlan.from_output(scrubbed_output)
