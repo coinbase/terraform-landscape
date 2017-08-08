@@ -3,11 +3,11 @@ require 'terraform_landscape/terraform_plan'
 
 describe TerraformLandscape::TerraformPlan do
   describe '#display' do
-    before(:all) do |example|
+    before(:all) do
       String.disable_colorization = true
     end
 
-    after(:all) do |example|
+    after(:all) do
       String.disable_colorization = false
     end
 

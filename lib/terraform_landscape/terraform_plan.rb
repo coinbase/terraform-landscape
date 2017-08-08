@@ -9,7 +9,7 @@ require 'treetop'
 # This allows us to easily inspect the plan and present a more readable
 # explanation of the plan to the user.
 ########################################################################
-class TerraformLandscape::TerraformPlan
+class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
   GRAMMAR_FILE = File.expand_path(File.join(File.dirname(__FILE__),
                                             '..', '..', 'grammar',
                                             'terraform_plan.treetop'))
@@ -141,7 +141,7 @@ class TerraformLandscape::TerraformPlan
     end
   end
 
-  def display_modified_attribute( # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def display_modified_attribute( # rubocop:disable Metrics/MethodLength
     change_color,
     attribute_name,
     attribute_value,
@@ -151,7 +151,7 @@ class TerraformLandscape::TerraformPlan
     # Handle case where attribute has an annotation (e.g. "forces new resource")
     # appended onto the end. This is hard to parse in the Treetop grammar, so we
     # instead catch it here and extract
-    if match = attribute_value.match(/\((?<reason>[^)]+)\)$/)
+    if (match = attribute_value.match(/\((?<reason>[^)]+)\)$/))
       reason = match['reason']
       attribute_value = attribute_value[0...match.begin(0)]
     end
@@ -159,7 +159,7 @@ class TerraformLandscape::TerraformPlan
     # Since the attribute line is always of the form
     # "old value" => "new value", we can add curly braces and parse with
     # `eval` to obtain a hash with a single key/value.
-    old, new = eval("{#{attribute_value}}").to_a.first # rubocop:disable Lint/Eval
+    old, new = eval("{#{attribute_value}}").to_a.first # rubocop:disable Security/Eval
 
     return if old == new # Don't show unchanged attributes
 
@@ -196,9 +196,10 @@ class TerraformLandscape::TerraformPlan
     @out.print "    #{attribute_name}:".ljust(attribute_value_indent_amount, ' ')
       .colorize(change_color)
 
-    evaluated_string = eval(attribute_value) # rubocop:disable Lint/Eval
+    evaluated_string = eval(attribute_value) # rubocop:disable Security/Eval
     if json?(evaluated_string)
-      @out.print to_pretty_json(evaluated_string).gsub("\n", "\n" + attribute_value_indent)
+      @out.print to_pretty_json(evaluated_string).gsub("\n",
+                                                       "\n#{attribute_value_indent}")
         .colorize(change_color)
     else
       @out.print "\"#{evaluated_string.colorize(change_color)}\""

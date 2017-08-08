@@ -15,7 +15,7 @@ module TerraformLandscape
     # @param args [Array<String>] command line arguments
     #
     # @return [Integer] exit status code
-    def run(args)
+    def run(_args)
       program :name, 'Terraform Landscape'
       program :version, VERSION
       program :description, 'Pretty-print your Terraform plan output'
