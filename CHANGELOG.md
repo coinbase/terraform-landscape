@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## master (unreleased)
+
+* Gracefully handle case where Terraform output does not contain postface
+
 ## 0.1.6
 
 * Fix handling of read action resources (`<=`)
