@@ -12,10 +12,10 @@ describe TerraformLandscape::TerraformPlan do
     end
 
     subject do
-      @output = StringIO.new
-      output = TerraformLandscape::Output.new(@output)
+      output_io = StringIO.new
+      output = TerraformLandscape::Output.new(output_io)
       described_class.from_output(terraform_output).display(output)
-      @output.string
+      output_io.string
     end
 
     context 'when there is no output' do

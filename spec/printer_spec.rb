@@ -13,10 +13,10 @@ describe TerraformLandscape::Printer do
     end
 
     subject do
-      @output = StringIO.new
-      output = TerraformLandscape::Output.new(@output)
+      output_io = StringIO.new
+      output = TerraformLandscape::Output.new(output_io)
       TerraformLandscape::Printer.new(output).process_string(terraform_output)
-      @output.string
+      output_io.string
     end
 
     context 'when there are no changes' do
