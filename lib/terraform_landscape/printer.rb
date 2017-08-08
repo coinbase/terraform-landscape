@@ -1,6 +1,8 @@
 require 'stringio'
 
 module TerraformLandscape
+  # Takes output from Terraform executable nad outputs it in a prettified
+  # format.
   class Printer
     def initialize(output)
       @output = output
@@ -41,7 +43,7 @@ module TerraformLandscape
         scrubbed_output = scrubbed_output[match.end(0)..-1]
       elsif (match = scrubbed_output.match(/^(~|\+|\-)/))
         scrubbed_output = scrubbed_output[match.begin(0)..-1]
-      elsif scrubbed_output.match(/^No changes/)
+      elsif scrubbed_output =~ /^No changes/
         @output.puts 'No changes'
         return
       else
@@ -52,8 +54,6 @@ module TerraformLandscape
       if (match = scrubbed_output.match(/^Plan:[^\n]+/))
         plan_summary = scrubbed_output[match.begin(0)..match.end(0)]
         scrubbed_output = scrubbed_output[0...match.begin(0)]
-      else
-        # No matching postface, so ignore
       end
 
       plan = TerraformPlan.from_output(scrubbed_output)

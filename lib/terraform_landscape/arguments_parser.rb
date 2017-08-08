@@ -13,7 +13,7 @@ module TerraformLandscape
       @options[:command] = :pretty_print # Default command
 
       OptionParser.new do |parser|
-        parser.banner = "Usage: landscape [options] [plan-output-file]"
+        parser.banner = 'Usage: landscape [options] [plan-output-file]'
 
         add_info_options parser
       end.parse!(args)
