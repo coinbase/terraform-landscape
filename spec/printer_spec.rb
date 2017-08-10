@@ -60,6 +60,27 @@ describe TerraformLandscape::Printer do
       OUT
     end
 
+    context 'when output does not contain a Path' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+      Note: You didn't specify an "-out" parameter to save this plan, so when
+      "apply" is called, Terraform can't guarantee this is what will execute.
+
+        ~ some_resource_type.some_resource_name
+            some_attribute_name:    "3" => "4"
+
+      Plan: 0 to add, 1 to change, 0 to destroy.
+      Releasing state lock. This may take a few moments...
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+      ~ some_resource_type.some_resource_name
+          some_attribute_name:   "3" => "4"
+
+      Plan: 0 to add, 1 to change, 0 to destroy.
+
+      OUT
+    end
+
     context 'when output does not contain a pre- or post-face' do
       let(:terraform_output) { normalize_indent(<<-TXT) }
         ~ some_resource_type.some_resource_name
