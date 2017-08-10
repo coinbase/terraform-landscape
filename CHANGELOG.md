@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.1.8
 
 * Fix handling of Terraform plan outputs when `-out` flag not specified
 
