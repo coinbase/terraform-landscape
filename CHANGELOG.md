@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## master (unreleased)
+
+* Fix handling of Terraform plan outputs when `-out` flag not specified
+
 ## 0.1.7
 
 * Gracefully handle case where Terraform output does not contain postface
