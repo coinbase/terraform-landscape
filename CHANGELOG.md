@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## 0.1.9
+
+* Fix handling of additional indentation in Terraform 0.10.0 output
+
 ## 0.1.8
 
 * Fix handling of Terraform plan outputs when `-out` flag not specified
