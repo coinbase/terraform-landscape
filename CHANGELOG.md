@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.1.9
 
 * Fix handling of additional indentation in Terraform 0.10.0 output
 
