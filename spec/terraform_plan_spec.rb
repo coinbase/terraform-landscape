@@ -196,7 +196,6 @@ describe TerraformLandscape::TerraformPlan do
     end
 
     context 'when output attribute name contains a space' do
-
       let(:terraform_output) { normalize_indent(<<-TXT) }
         + some_resource_type.some_resource_name
             some_attribute_name:                   "2"
