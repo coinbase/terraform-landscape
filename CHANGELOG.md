@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.1.10
 
 * Fix handling of attribute names with spaces
 
