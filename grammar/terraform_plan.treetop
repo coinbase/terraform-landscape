@@ -75,7 +75,7 @@ grammar TerraformPlan
   end
 
   rule attribute
-    attribute_name:[^\s:]* ':' _? attribute_value:[^\n]+ {
+    attribute_name:[^:]* ':' _? attribute_value:[^\n]+ {
       def to_ast
         { attribute_name.text_value => attribute_value.text_value }
       end

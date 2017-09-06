@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## master (unreleased)
+
+* Fix handling of attribute names with spaces
+
 ## 0.1.9
 
 * Fix handling of additional indentation in Terraform 0.10.0 output

@@ -195,6 +195,21 @@ describe TerraformLandscape::TerraformPlan do
       OUT
     end
 
+    context 'when output attribute name contains a space' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+        + some_resource_type.some_resource_name
+            some_attribute_name:                   "2"
+            some_attribute.with space:             "blah"
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+        + some_resource_type.some_resource_name
+            some_attribute_name:         "2"
+            some_attribute.with space:   "blah"
+
+      OUT
+    end
+
     context 'when added resource contains an attribute with JSON' do
       let(:terraform_output) { normalize_indent(<<-TXT) }
         + aws_iam_policy.user-my-test
