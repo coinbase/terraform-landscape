@@ -76,11 +76,14 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     # Determine longest attribute name so we align all values at same indentation
     attribute_value_indent_amount = attribute_indent_amount_for_resource(resource)
 
-    resource[:attributes].each do |attribute_name, attribute_value|
+    resource[:attributes].each do |attribute_name, attribute_value_and_reason|
+      attribute_value = attribute_value_and_reason[:value]
+      attribute_change_reason = attribute_value_and_reason[:reason]
       display_attribute(resource,
                         change_color,
                         attribute_name,
                         attribute_value,
+                        attribute_change_reason,
                         attribute_value_indent_amount)
     end
   end
@@ -122,6 +125,7 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     change_color,
     attribute_name,
     attribute_value,
+    attribute_change_reason,
     attribute_value_indent_amount
   )
     attribute_value_indent = ' ' * attribute_value_indent_amount
@@ -130,6 +134,7 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
       display_modified_attribute(change_color,
                                  attribute_name,
                                  attribute_value,
+                                 attribute_change_reason,
                                  attribute_value_indent,
                                  attribute_value_indent_amount)
     else
@@ -145,17 +150,10 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     change_color,
     attribute_name,
     attribute_value,
+    attribute_change_reason,
     attribute_value_indent,
     attribute_value_indent_amount
   )
-    # Handle case where attribute has an annotation (e.g. "forces new resource")
-    # appended onto the end. This is hard to parse in the Treetop grammar, so we
-    # instead catch it here and extract
-    if (match = attribute_value.match(/\((?<reason>[^)]+)\)$/))
-      reason = match['reason']
-      attribute_value = attribute_value[0...match.begin(0)]
-    end
-
     # Since the attribute line is always of the form
     # "old value" => "new value", we can add curly braces and parse with
     # `eval` to obtain a hash with a single key/value.
@@ -181,7 +179,7 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
       @out.print '"' + new.colorize(:green) + '"'
     end
 
-    @out.print " (#{reason})".colorize(:magenta) if reason
+    @out.print " (#{attribute_change_reason})".colorize(:magenta) if attribute_change_reason
 
     @out.newline
   end

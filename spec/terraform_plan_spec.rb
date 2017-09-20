@@ -130,6 +130,24 @@ describe TerraformLandscape::TerraformPlan do
       OUT
     end
 
+    context 'when output contains a rebuilt resource and no quotes' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+          -/+ random_id.abc (tainted)
+              b64:         "e20SLHAH5CXBCw" => <computed>
+              b64_std:     "e20SLHAH5CXBCw==" => <computed>
+              b64_url:     "e20SLHAH5CXBCw" => <computed>
+
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+        -/+ random_id.abc (tainted)
+            b64:       "e20SLHAH5CXBCw" => "<computed>"
+            b64_std:   "e20SLHAH5CXBCw==" => "<computed>"
+            b64_url:   "e20SLHAH5CXBCw" => "<computed>"
+
+      OUT
+    end
+
     context 'when output contains a resource read action' do
       let(:terraform_output) { normalize_indent(<<-TXT) }
         <= data.external.ext
@@ -164,6 +182,40 @@ describe TerraformLandscape::TerraformPlan do
         -/+ template_file.demo
             rendered:   "" => "<computed>"
             template:   "" => "<computed>" (forces new resource)
+
+      OUT
+    end
+
+    context 'when output contains an attribute change forcing a rebuild without quotes' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+        -/+ template_file.demo
+            rendered: "" => <computed>
+            template: "" => <computed> (forces new resource)
+
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+        -/+ template_file.demo
+            rendered:   "" => "<computed>"
+            template:   "" => "<computed>" (forces new resource)
+
+      OUT
+    end
+
+    context 'when output contains an attribute containing the string <computed>' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+        -/+ template_file.demo
+            rendered: "" => "This string contains <computed>"
+            bendered: "" => "This string contains => <computed> with an arrow"
+            template: "" => "This string contains <computed> in it" (forces new resource)
+
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+        -/+ template_file.demo
+            rendered:   "" => "This string contains <computed>"
+            bendered:   "" => "This string contains => <computed> with an arrow"
+            template:   "" => "This string contains <computed> in it" (forces new resource)
 
       OUT
     end
@@ -311,6 +363,21 @@ describe TerraformLandscape::TerraformPlan do
                                "s3:*"
                              ],
                              "Condition": {
+
+      OUT
+    end
+
+    context 'when computed output is included without quotes' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+        + some_resource_type.some_resource_name
+            id:                     <computed>
+            some_attribute_name:    "foo"
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+        + some_resource_type.some_resource_name
+            id:                    "<computed>"
+            some_attribute_name:   "foo"
 
       OUT
     end
