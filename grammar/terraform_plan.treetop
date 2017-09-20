@@ -77,20 +77,27 @@ grammar TerraformPlan
   rule attribute
     attribute_name:[^:]* ':' _? attribute_value:[^\n]+ {
       def to_ast
-        { attribute_name.text_value => sanitize_value }
+        { attribute_name.text_value => sanitize_value_and_reason }
       end
 
-      def sanitize_value
+      def sanitize_value_and_reason
         val = attribute_value.text_value
 
         # We'll perform some sanitization of the values within the parser.
 
+        # Handle case where attribute has an annotation (e.g. "forces new resource")
+        if (match = val.match(/\s+\((?<reason>[^)]+)\)$/))
+          reason = match['reason']
+          val = val[0...match.begin(0)]
+        end
+
         # With Terraform >= 0.10.4, the <computed> field is now without quotes,
         # which will cause problem with how downstream we process the output.
         # Convert it to have quotes and handle < 0.10.4 as well.
-        val = val.gsub(%r{<computed>}, '"<computed>"').gsub(%r{""<computed>""}, '"<computed>"')
+        val = val.gsub(%r{=> <computed>$}, '=> "<computed>"')
+                 .gsub(%r{^<computed>}, '"<computed>"')
 
-        val
+        { value: val, reason: reason }
       end
     }
   end
