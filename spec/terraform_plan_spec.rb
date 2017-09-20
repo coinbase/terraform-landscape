@@ -381,5 +381,22 @@ describe TerraformLandscape::TerraformPlan do
 
       OUT
     end
+
+    context 'when resouce contains tags and various characters' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+        + some_resource_type.some_resource_name
+            some_attribute_name:   "foo"
+            tags.%:                "1"
+            tags.foo:bar:          "zip:zap"
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+        + some_resource_type.some_resource_name
+            some_attribute_name:   "foo"
+            tags.%:                "1"
+            tags.foo:bar:          "zip:zap"
+
+      OUT
+    end
   end
 end
