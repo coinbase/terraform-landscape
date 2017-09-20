@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.1.11
 
 * Fix handling of `<computed>` attribute values with Terraform 0.10.4+
 
