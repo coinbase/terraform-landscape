@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.1.12
 
 * Fix processing attribute names that include colons
 
