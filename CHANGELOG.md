@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## master (unreleased)
+
+* Fix processing attribute names that include colons
+
 ## 0.1.11
 
 * Fix handling of `<computed>` attribute values with Terraform 0.10.4+
