@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## master (unreleased)
+
+* Fix processing of resource changes with `(new resource required)` explanation
+
 ## 0.1.12
 
 * Fix processing attribute names that include colons
