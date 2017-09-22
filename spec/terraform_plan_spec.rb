@@ -148,6 +148,22 @@ describe TerraformLandscape::TerraformPlan do
       OUT
     end
 
+    context 'when output contains a rebuilt resource with additional reason' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+          -/+ null_resource.foo (tainted) (new resource required)
+              id:                    "123456789" => <computed> (forces new resource)
+              triggers.%:            "1" => "2"
+
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+          -/+ null_resource.foo (tainted) (new resource required)
+              id:           "123456789" => "<computed>" (forces new resource)
+              triggers.%:   "1" => "2"
+
+      OUT
+    end
+
     context 'when output contains a resource read action' do
       let(:terraform_output) { normalize_indent(<<-TXT) }
         <= data.external.ext

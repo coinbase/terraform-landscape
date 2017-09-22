@@ -70,6 +70,7 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     resource_header = "#{resource[:change]} #{resource[:resource_type]}." \
                       "#{resource[:resource_name]}".colorize(change_color)
     resource_header += " (#{resource[:reason]})".colorize(:magenta) if resource[:reason]
+    resource_header += " (#{resource[:additional_reason]})".colorize(:magenta) if resource[:additional_reason]
 
     @out.puts resource_header
 

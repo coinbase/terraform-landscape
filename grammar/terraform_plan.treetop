@@ -44,8 +44,8 @@ grammar TerraformPlan
           change: change.text_value.to_sym,
           resource_type: type.text_value,
           resource_name: name.text_value,
-          reason1: reason1.text_value,
-          reason2: reason2.text_value,
+          reason: reason1.text_value,
+          additional_reason: reason2.text_value,
         }
       end
     }
