@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.1.13
 
 * Fix processing of resource changes with `(new resource required)` explanation
 
