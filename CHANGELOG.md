@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## master (unreleased)
+
+* Fix handling of `This plan does nothing` output
+
 ## 0.1.13
 
 * Fix processing of resource changes with `(new resource required)` explanation
