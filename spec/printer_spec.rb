@@ -40,6 +40,27 @@ describe TerraformLandscape::Printer do
       OUT
     end
 
+    context 'when plan does nothing' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+        Acquiring state lock. This may take a few moments...
+        Refreshing Terraform state in-memory prior to plan...
+        The refreshed state will be used to calculate this plan, but will not be
+        persisted to local or remote state storage.
+
+        aws_iam_role.role: Refreshing state... (ID: role)
+        This plan does nothing.
+
+        This means that Terraform did not detect any differences between your
+        configuration and real physical resources that exist. As a result, Terraform
+        doesn't need to do anything.
+        Releasing state lock. This may take a few moments...
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+        No changes
+      OUT
+    end
+
     context 'when output contains a pre- and post-face' do
       let(:terraform_output) { normalize_indent(<<-TXT) }
       Path: terraform.tfplan
