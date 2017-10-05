@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.1.14
 
 * Fix handling of `This plan does nothing` output
 
