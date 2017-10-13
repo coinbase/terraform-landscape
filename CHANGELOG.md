@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## master (unreleased)
+
+* Update the support for unquoted bracketed output to work with `<sensitive>` fields
+
 ## 0.1.14
 
 * Fix handling of `This plan does nothing` output
