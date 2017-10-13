@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.1.15
 
 * Update the support for unquoted bracketed output to work with `<sensitive>` fields
 
