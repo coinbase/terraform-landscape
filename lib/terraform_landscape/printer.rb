@@ -36,7 +36,12 @@ module TerraformLandscape
     end
 
     def process_string(plan_output)
-      scrubbed_output = plan_output.gsub(/\e\[\d+m/, '')
+      scrubbed_output = plan_output.gsub(/\e\[\d+m/, '').gsub(/^-{72}\n{2}/, '')
+
+      if scrubbed_output =~ /^(No changes. Infrastructure is up-to-date|This plan does nothing)/
+        @output.puts 'No changes'
+        return
+      end
 
       # Remove initialization messages like
       # "- Downloading plugin for provider "aws" (1.1.0)..."
@@ -50,9 +55,6 @@ module TerraformLandscape
         scrubbed_output = scrubbed_output[match.end(0)..-1]
       elsif (match = scrubbed_output.match(/^\s*(~|\+|\-)/))
         scrubbed_output = scrubbed_output[match.begin(0)..-1]
-      elsif scrubbed_output =~ /^(No changes|This plan does nothing)/
-        @output.puts 'No changes'
-        return
       else
         raise ParseError, 'Output does not contain proper preface'
       end
