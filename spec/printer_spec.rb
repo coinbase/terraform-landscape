@@ -139,5 +139,43 @@ describe TerraformLandscape::Printer do
 
       OUT
     end
+
+    context 'when output contains initialization messages' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+        Initializing provider plugins...
+        - Checking for available provider plugins on https://releases.hashicorp.com...
+        - Downloading plugin for provider "aws" (1.1.0)...
+
+        The following providers do not have any version constraints in configuration,
+        so the latest version was installed.
+
+        To prevent automatic upgrades to new major versions that may contain breaking
+        changes, it is recommended to add version = "..." constraints to the
+        corresponding provider blocks in configuration, with the constraint strings
+        suggested below.
+
+        * provider.aws: version = "~> 1.1"
+
+        Terraform has been successfully initialized!
+
+        You may now begin working with Terraform. Try running "terraform plan" to see
+        any changes that are required for your infrastructure. All Terraform commands
+        should now work.
+
+        If you ever set or change modules or backend configuration for Terraform,
+        rerun this command to reinitialize your working directory. If you forget, other
+        commands will detect it and remind you to do so if necessary.
+
+        No changes. Infrastructure is up-to-date.
+
+        This means that Terraform did not detect any differences between your
+        configuration and real physical resources that exist. As a result, no
+        actions need to be performed.
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+        No changes
+      OUT
+    end
   end
 end
