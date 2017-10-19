@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## master (unreleased)
+
+* Fix handling of initialization messages output by `terraform init`
+
 ## 0.1.15
 
 * Update the support for unquoted bracketed output to work with `<sensitive>` fields
