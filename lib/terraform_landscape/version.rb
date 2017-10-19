@@ -2,5 +2,5 @@
 
 # Defines the gem version.
 module TerraformLandscape
-  VERSION = '0.1.15'.freeze
+  VERSION = '0.1.16'.freeze
 end

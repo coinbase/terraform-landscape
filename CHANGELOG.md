@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.1.16
 
 * Fix handling of initialization messages output by `terraform init`
 
