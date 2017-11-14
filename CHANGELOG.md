@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.1.17
 
 * Fix handling of dashed line separators after state refresh output
 
