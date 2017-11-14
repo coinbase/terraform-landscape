@@ -177,5 +177,34 @@ describe TerraformLandscape::Printer do
         No changes
       OUT
     end
+
+    context 'when output contains a separator after refreshing state' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+        Refreshing Terraform state in-memory prior to plan...
+        The refreshed state will be used to calculate this plan, but will not be
+        persisted to local or remote state storage.
+
+        aws_vpc.poc: Refreshing state... (ID:   ##vpc-xxxxxxxxxxxxx)
+        data.aws_iam_policy_document.flowlogs: Refreshing state...
+        data.aws_iam_policy_document.rds_assume_policy: Refreshing state...
+        data.aws_iam_policy_document.flowlogs_assume_role_policy: Refreshing state...
+        aws_iam_role.rds: Refreshing state... (ID: xxxxxxxxxxxxxxxxxRole)
+        aws_iam_role.flowlogs: Refreshing state... (ID: xxxxxxxxxxxxxxRole)
+        aws_iam_role_policy.flowlogs: Refreshing state... (ID: xxxxxxxxxxxxxCreatePolicy)
+        aws_iam_role_policy_attachment.rds: Refreshing state... (ID: xxxxxxxxxxxxxxRole-20171030050803915500000001)
+
+        ------------------------------------------------------------------------
+
+        No changes. Infrastructure is up-to-date.
+
+        This means that Terraform did not detect any differences between your
+        configuration and real physical resources that exist. As a result, no
+        actions need to be performed.
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+        No changes
+      OUT
+    end
   end
 end

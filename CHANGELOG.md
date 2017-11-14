@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## 0.1.17
+
+* Fix handling of dashed line separators after state refresh output
+
 ## 0.1.16
 
 * Fix handling of initialization messages output by `terraform init`

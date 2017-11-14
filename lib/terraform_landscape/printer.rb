@@ -43,6 +43,9 @@ module TerraformLandscape
       # as these break the parser which thinks "-" is a resource deletion
       scrubbed_output.gsub!(/^- .*\.\.\.$/, '')
 
+      # Remove separation lines that appear after refreshing state
+      scrubbed_output.gsub!(/^-+$/, '')
+
       # Remove preface
       if (match = scrubbed_output.match(/^Path:[^\n]+/))
         scrubbed_output = scrubbed_output[match.end(0)..-1]
