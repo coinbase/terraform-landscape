@@ -35,7 +35,7 @@ module TerraformLandscape
       process_string(buffer.string)
     end
 
-    def process_string(plan_output)
+    def process_string(plan_output) # rubocop:disable Metrics/MethodLength
       scrubbed_output = plan_output.gsub(/\e\[\d+m/, '')
 
       # Remove initialization messages like

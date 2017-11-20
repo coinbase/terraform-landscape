@@ -64,13 +64,19 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
 
   private
 
-  def display_resource(resource)
+  def display_resource(resource) # rubocop:disable Metrics/MethodLength
     change_color = CHANGE_SYMBOL_TO_COLOR[resource[:change]]
 
     resource_header = "#{resource[:change]} #{resource[:resource_type]}." \
                       "#{resource[:resource_name]}".colorize(change_color)
-    resource_header += " (#{resource[:reason]})".colorize(:magenta) if resource[:reason]
-    resource_header += " (#{resource[:additional_reason]})".colorize(:magenta) if resource[:additional_reason]
+
+    if resource[:reason]
+      resource_header += " (#{resource[:reason]})".colorize(:magenta)
+    end
+
+    if resource[:additional_reason]
+      resource_header += " (#{resource[:additional_reason]})".colorize(:magenta)
+    end
 
     @out.puts resource_header
 
@@ -117,11 +123,11 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
   def display_diff(old, new, indent)
     @out.print Diffy::Diff.new(old, new, { context: @diff_context_lines })
       .to_s(String.disable_colorization ? :text : :color)
-      .gsub("\n", "\n" + indent)
-      .strip
+                          .gsub("\n", "\n" + indent)
+                          .strip
   end
 
-  def display_attribute(
+  def display_attribute( # rubocop:disable Metrics/ParameterLists
     resource,
     change_color,
     attribute_name,
@@ -131,7 +137,7 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
   )
     attribute_value_indent = ' ' * attribute_value_indent_amount
 
-    if [:~, :'-/+'].include?(resource[:change])
+    if %i[~ -/+].include?(resource[:change])
       display_modified_attribute(change_color,
                                  attribute_name,
                                  attribute_value,
@@ -147,7 +153,7 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def display_modified_attribute( # rubocop:disable Metrics/MethodLength
+  def display_modified_attribute( # rubocop:disable Metrics/ParameterLists
     change_color,
     attribute_name,
     attribute_value,
@@ -163,7 +169,7 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     return if old == new # Don't show unchanged attributes
 
     @out.print "    #{attribute_name}:".ljust(attribute_value_indent_amount, ' ')
-      .colorize(change_color)
+                                       .colorize(change_color)
 
     if json?(new)
       # Value looks like JSON, so prettify it to make it more readable
@@ -180,7 +186,9 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
       @out.print '"' + new.colorize(:green) + '"'
     end
 
-    @out.print " (#{attribute_change_reason})".colorize(:magenta) if attribute_change_reason
+    if attribute_change_reason
+      @out.print " (#{attribute_change_reason})".colorize(:magenta)
+    end
 
     @out.newline
   end
@@ -193,13 +201,13 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     attribute_value_indent_amount
   )
     @out.print "    #{attribute_name}:".ljust(attribute_value_indent_amount, ' ')
-      .colorize(change_color)
+                                       .colorize(change_color)
 
     evaluated_string = eval(attribute_value) # rubocop:disable Security/Eval
     if json?(evaluated_string)
       @out.print to_pretty_json(evaluated_string).gsub("\n",
                                                        "\n#{attribute_value_indent}")
-        .colorize(change_color)
+                                                 .colorize(change_color)
     else
       @out.print "\"#{evaluated_string.colorize(change_color)}\""
     end

@@ -5,4 +5,4 @@ gemspec
 # Development dependencies are listed below
 
 gem 'rspec',      '~> 3.0'
-gem 'rubocop',    '0.47.1'
+gem 'rubocop',    '0.51.0'
