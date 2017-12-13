@@ -25,6 +25,14 @@ The `landscape` executable is installed via [RubyGems](https://rubygems.org/).
 gem install terraform_landscape
 ```
 
+### macOS
+
+Terraform Landscape is also available via [Homebrew](https://brew.sh/).
+
+```bash
+brew install terraform_landscape
+```
+
 ## Usage
 
 Pipe the output of `terraform plan` into `landscape` to reformat the output.
