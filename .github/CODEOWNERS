@@ -1,0 +1,4 @@
+# Defines the owners of various files in this project.
+# Each line is a file pattern followed by one or more owners.
+
+* @grahamjenson @krobertson @sds
