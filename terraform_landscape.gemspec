@@ -25,5 +25,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'colorize',    '~> 0.7'
   s.add_dependency 'commander',   '~> 4.4'
   s.add_dependency 'diffy',       '~> 3.0'
+  s.add_dependency 'neatjson',    '~> 0.8'
   s.add_dependency 'treetop',     '~> 1.6'
 end

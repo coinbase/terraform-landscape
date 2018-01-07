@@ -1,6 +1,6 @@
 require 'colorize'
 require 'diffy'
-require 'json'
+require 'neatjson'
 require 'treetop'
 
 ########################################################################
@@ -111,8 +111,9 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     # Can't JSON.parse an empty string, so handle it separately
     return '' if value.strip.empty?
 
-    JSON.pretty_generate(JSON.parse(value),
+    JSON.neat_generate(JSON.parse(value),
                          {
+                           sort: true,
                            indent: '  ',
                            space: ' ',
                            object_nl: "\n",
