@@ -40,6 +40,25 @@ The best way to see a feature added, however, is to submit a pull request.
 
 * Submit your pull request!
 
+### Development Setup
+
+Install dependencies
+
+```bash
+bundle install
+```
+
+Run tests
+```bash
+bundle exec rspec
+```
+
+Run tests in watch mode
+```bash
+bundle exec guard
+```
+
+
 ## Support Requests
 
 For security reasons, any communication referencing support tickets for Coinbase
