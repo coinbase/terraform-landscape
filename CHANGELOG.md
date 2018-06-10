@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## master (unreleased)
+
+* Allow confirming `terraform apply` prompt
+
 ## 0.1.17
 
 * Fix handling of dashed line separators after state refresh output
