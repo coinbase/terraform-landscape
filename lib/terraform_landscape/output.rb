@@ -104,6 +104,13 @@ module TerraformLandscape
       @out.respond_to?(:tty?) && @out.tty?
     end
 
+    # Connect directly to a readable stream
+    def write_from(other_io)
+      while line = other_io.gets do
+        print line
+      end
+    end
+
     private
 
     # Print output in the specified color.

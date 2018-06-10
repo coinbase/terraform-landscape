@@ -3,19 +3,25 @@ require 'terraform_landscape/output'
 require 'terraform_landscape/printer'
 
 describe TerraformLandscape::Printer do
-  describe '#display' do
-    before(:all) do
-      String.disable_colorization = true
-    end
+  let(:output_io) do
+    StringIO.new
+  end
+  let(:printer) do
+    output = TerraformLandscape::Output.new(output_io)
+    TerraformLandscape::Printer.new(output)
+  end
 
-    after(:all) do
-      String.disable_colorization = false
-    end
+  before(:all) do
+    String.disable_colorization = true
+  end
+
+  after(:all) do
+    String.disable_colorization = false
+  end
+  describe '#process_string' do
 
     subject do
-      output_io = StringIO.new
-      output = TerraformLandscape::Output.new(output_io)
-      TerraformLandscape::Printer.new(output).process_string(terraform_output)
+      printer.process_string(terraform_output)
       output_io.string
     end
 
@@ -205,6 +211,93 @@ describe TerraformLandscape::Printer do
       it { should == normalize_indent(<<-OUT) }
         No changes
       OUT
+    end
+  end
+
+  describe '#process_stream' do
+    subject do
+      output_io.string
+    end
+
+    around(:each) do |example|
+      Timeout::timeout(2) do
+        example.run
+      end
+    end
+
+    it 'processes a completed stream' do
+      terraform_output = normalize_indent(<<-TXT)
+      Path: terraform.tfplan
+
+        ~ some_resource_type.some_resource_name
+            some_attribute_name:    "3" => "4"
+
+      Plan: 0 to add, 1 to change, 0 to destroy.
+      Releasing state lock. This may take a few moments...
+      TXT
+
+      outstream, instream = IO.pipe
+      terraform_output.split("\n").each do |line|
+        instream.puts(line)
+      end
+      instream.close
+      printer.process_stream(outstream)
+
+      should == normalize_indent(<<-OUT)
+      ~ some_resource_type.some_resource_name
+          some_attribute_name:   "3" => "4"
+
+      Plan: 0 to add, 1 to change, 0 to destroy.
+
+      OUT
+    end
+
+    it "processes an apply prompt that's still open" do
+      terraform_output = normalize_indent(<<-TXT)
+      Path: terraform.tfplan
+
+        ~ some_resource_type.some_resource_name
+            some_attribute_name:    "3" => "4"
+
+      Plan: 0 to add, 1 to change, 0 to destroy.
+
+      Do you want to perform these actions?
+        Terraform will perform the actions described above.
+        Only 'yes' will be accepted to approve.
+
+        Enter a value:
+      TXT
+
+      begin
+        outstream, instream = IO.pipe
+
+        process = Thread.new {
+          printer.process_stream(outstream)
+        }
+
+        terraform_output.split("\n").each do |line|
+          instream.puts(line)
+        end
+
+        sleep(0.2)
+
+        should == normalize_indent(<<-OUT)
+        ~ some_resource_type.some_resource_name
+            some_attribute_name:   "3" => "4"
+
+        Plan: 0 to add, 1 to change, 0 to destroy.
+
+        Do you want to perform these actions?
+          Terraform will perform the actions described above.
+          Only 'yes' will be accepted to approve.
+
+          Enter a value:
+        OUT
+      ensure
+        # finish off the input stream and check that the process ends
+        instream.close
+        process.join
+      end
     end
   end
 end

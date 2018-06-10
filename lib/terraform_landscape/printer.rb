@@ -9,6 +9,7 @@ module TerraformLandscape
     end
 
     def process_stream(io)
+      apply = nil
       buffer = StringIO.new
       begin
         block_size = 1024
@@ -20,23 +21,28 @@ module TerraformLandscape
 
           readable_fds.each do |f|
             begin
-              buffer << f.read_nonblock(block_size)
+              buffer << strip_ansi(f.read_nonblock(block_size))
             rescue IO::WaitReadable # rubocop:disable Lint/HandleExceptions
               # Ignore; we'll call IO.select again
             rescue EOFError
               done = true
             end
           end
+
+          apply = apply_prompt(buffer.string)
+          done = true if apply
         end
+        process_string(buffer.string)
+
+        @output.print apply if apply
+        @output.write_from(io)
       ensure
         io.close
       end
-
-      process_string(buffer.string)
     end
 
     def process_string(plan_output) # rubocop:disable Metrics/MethodLength
-      scrubbed_output = plan_output.gsub(/\e\[\d+m/, '')
+      scrubbed_output = strip_ansi(plan_output)
 
       # Remove initialization messages like
       # "- Downloading plugin for provider "aws" (1.1.0)..."
@@ -69,6 +75,18 @@ module TerraformLandscape
       plan = TerraformPlan.from_output(scrubbed_output)
       plan.display(@output)
       @output.puts plan_summary
+    end
+
+    private
+
+    def strip_ansi(string)
+      string.gsub(/\e\[\d+m/, '')
+    end
+
+    def apply_prompt(output)
+      if output.match(/Enter a value:\s+$/) != nil
+        output[/Do you want to perform these actions\?.*$/m, 0]
+      end
     end
   end
 end
