@@ -18,8 +18,8 @@ describe TerraformLandscape::Printer do
   after(:all) do
     String.disable_colorization = false
   end
-  describe '#process_string' do
 
+  describe '#process_string' do
     subject do
       printer.process_string(terraform_output)
       output_io.string
@@ -220,7 +220,7 @@ describe TerraformLandscape::Printer do
     end
 
     around(:each) do |example|
-      Timeout::timeout(2) do
+      Timeout.timeout(2) do
         example.run
       end
     end
@@ -271,9 +271,9 @@ describe TerraformLandscape::Printer do
       begin
         outstream, instream = IO.pipe
 
-        process = Thread.new {
+        process = Thread.new do
           printer.process_stream(outstream)
-        }
+        end
 
         terraform_output.split("\n").each do |line|
           instream.puts(line)

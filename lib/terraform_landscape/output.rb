@@ -106,7 +106,7 @@ module TerraformLandscape
 
     # Connect directly to a readable stream
     def write_from(other_io)
-      while line = other_io.gets do
+      while (line = other_io.gets)
         print line
       end
     end

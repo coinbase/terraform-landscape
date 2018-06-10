@@ -1,10 +1,10 @@
 rspec_options = {
-  cmd: "bundle exec rspec",
+  cmd: 'bundle exec rspec',
   all_on_start: true
 }
 
 guard :rspec, **rspec_options do
-  require "guard/rspec/dsl"
+  require 'guard/rspec/dsl'
   dsl = Guard::RSpec::Dsl.new(self)
 
   # RSpec files

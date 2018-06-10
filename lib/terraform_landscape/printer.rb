@@ -8,7 +8,7 @@ module TerraformLandscape
       @output = output
     end
 
-    def process_stream(io)
+    def process_stream(io) # rubocop:disable Metrics/MethodLength
       apply = nil
       buffer = StringIO.new
       begin
@@ -84,9 +84,8 @@ module TerraformLandscape
     end
 
     def apply_prompt(output)
-      if output.match(/Enter a value:\s+$/) != nil
-        output[/Do you want to perform these actions\?.*$/m, 0]
-      end
+      return unless output =~ /Enter a value:\s+$/
+      output[/Do you want to perform these actions\?.*$/m, 0]
     end
   end
 end
