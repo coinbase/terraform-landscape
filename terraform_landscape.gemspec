@@ -26,4 +26,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'commander',   '~> 4.4'
   s.add_dependency 'diffy',       '~> 3.0'
   s.add_dependency 'treetop',     '~> 1.6'
+  s.add_dependency 'deepsort',    '~> 0.4'
 end

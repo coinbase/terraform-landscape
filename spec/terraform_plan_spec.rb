@@ -295,10 +295,6 @@ describe TerraformLandscape::TerraformPlan do
             policy:   {
                         "Statement": [
                           {
-                            "Effect": "Allow",
-                            "Resource": [
-                              "arn:aws:dynamodb:us-east-1:123456789012:table/my-table"
-                            ],
                             "Action": [
                               "dynamodb:*",
                               "s3:*"
@@ -307,27 +303,13 @@ describe TerraformLandscape::TerraformPlan do
                               "Bool": {
                                 "aws:SecureTransport": "true"
                               }
-                            }
-                          },
-                          {
+                            },
                             "Effect": "Allow",
                             "Resource": [
-                              "arn:aws:s3:::my-s3-development"
-                            ],
-                            "Action": [
-                              "s3:*"
-                            ],
-                            "Condition": {
-                              "Bool": {
-                                "aws:SecureTransport": "true"
-                              }
-                            }
+                              "arn:aws:dynamodb:us-east-1:123456789012:table/my-table"
+                            ]
                           },
                           {
-                            "Effect": "Deny",
-                            "Resource": [
-                              "*"
-                            ],
                             "Action": [
                               "dynamodb:DeleteTable",
                               "s3:DeleteBucket"
@@ -336,7 +318,25 @@ describe TerraformLandscape::TerraformPlan do
                               "Bool": {
                                 "aws:SecureTransport": "true"
                               }
-                            }
+                            },
+                            "Effect": "Deny",
+                            "Resource": [
+                              "*"
+                            ]
+                          },
+                          {
+                            "Action": [
+                              "s3:*"
+                            ],
+                            "Condition": {
+                              "Bool": {
+                                "aws:SecureTransport": "true"
+                              }
+                            },
+                            "Effect": "Allow",
+                            "Resource": [
+                              "arn:aws:s3:::my-s3-development"
+                            ]
                           }
                         ],
                         "Version": "2012-10-17"
@@ -353,10 +353,9 @@ describe TerraformLandscape::TerraformPlan do
 
       it { should == normalize_indent(<<-OUT) }
         ~ aws_iam_policy.my-user-test
-            policy:   "Effect": "Allow",
-                             "Resource": [
-                               "arn:aws:dynamodb:us-east-1:123456789012:table/my-user-test"
-                             ],
+            policy:   {
+                         "Statement": [
+                           {
                              "Action": [
                       -        "dynamodb:*"
                       +        "dynamodb:*",
@@ -366,19 +365,19 @@ describe TerraformLandscape::TerraformPlan do
                                "Bool": {
                                  "aws:SecureTransport": "true"
                                }
-                             }
-                           },
-                           {
+                                 "aws:SecureTransport": "true"
+                               }
+                             },
                              "Effect": "Allow",
                              "Resource": [
                       -        "arn:aws:s3:::my-s3-development",
                       -        "arn:aws:s3:::my-s3-development/*"
                       +        "arn:aws:s3:::my-s3-development"
-                             ],
-                             "Action": [
-                               "s3:*"
-                             ],
-                             "Condition": {
+                             ]
+                           }
+                         ],
+                         "Version": "2012-10-17"
+                       }
 
       OUT
     end

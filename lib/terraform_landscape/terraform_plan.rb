@@ -2,6 +2,7 @@ require 'colorize'
 require 'diffy'
 require 'json'
 require 'treetop'
+require 'deepsort'
 
 ########################################################################
 # Represents the parsed output of `terraform plan`.
@@ -111,7 +112,7 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     # Can't JSON.parse an empty string, so handle it separately
     return '' if value.strip.empty?
 
-    JSON.pretty_generate(JSON.parse(value),
+    JSON.pretty_generate(JSON.parse(value).deep_sort,
                          {
                            indent: '  ',
                            space: ' ',
