@@ -111,7 +111,7 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     # Can't JSON.parse an empty string, so handle it separately
     return '' if value.strip.empty?
 
-    JSON.pretty_generate(JSON.parse(value),
+    JSON.pretty_generate(::TerraformLandscape::Helpers.recursive_sort(JSON.parse(value)),
                          {
                            indent: '  ',
                            space: ' ',
