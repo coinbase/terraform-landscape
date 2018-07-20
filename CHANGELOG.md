@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.2.0
 
 * Sort JSON by keys before generating diff
 
