@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## master (unreleased)
+
+* Sort JSON by keys before generating diff
+
 ## 0.1.18
 
 * Allow confirming `terraform apply` prompt

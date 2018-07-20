@@ -111,13 +111,27 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     # Can't JSON.parse an empty string, so handle it separately
     return '' if value.strip.empty?
 
-    JSON.pretty_generate(JSON.parse(value),
+    sorted = recursive_sort(JSON.parse(value))
+    JSON.pretty_generate(sorted,
                          {
                            indent: '  ',
                            space: ' ',
                            object_nl: "\n",
                            array_nl: "\n"
                          })
+  end
+
+  def recursive_sort(obj)
+    case obj
+    when Array
+      obj.map { |item| recursive_sort(item) }
+    when Hash
+      obj.keys.sort.each_with_object({}) do |key, hash|
+        hash[key] = recursive_sort(obj[key])
+      end
+    else
+      obj
+    end
   end
 
   def display_diff(old, new, indent)

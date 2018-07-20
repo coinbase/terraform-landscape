@@ -288,59 +288,59 @@ describe TerraformLandscape::TerraformPlan do
       TXT
 
       it { should == normalize_indent(<<-OUT) }
-        + aws_iam_policy.user-my-test
-            arn:      "<computed>"
-            name:     "user-my-test"
-            path:     "/"
-            policy:   {
-                        "Statement": [
-                          {
-                            "Effect": "Allow",
-                            "Resource": [
-                              "arn:aws:dynamodb:us-east-1:123456789012:table/my-table"
-                            ],
-                            "Action": [
-                              "dynamodb:*",
-                              "s3:*"
-                            ],
-                            "Condition": {
-                              "Bool": {
-                                "aws:SecureTransport": "true"
-                              }
+      + aws_iam_policy.user-my-test
+          arn:      "<computed>"
+          name:     "user-my-test"
+          path:     "/"
+          policy:   {
+                      "Statement": [
+                        {
+                          "Action": [
+                            "dynamodb:*",
+                            "s3:*"
+                          ],
+                          "Condition": {
+                            "Bool": {
+                              "aws:SecureTransport": "true"
                             }
                           },
-                          {
-                            "Effect": "Allow",
-                            "Resource": [
-                              "arn:aws:s3:::my-s3-development"
-                            ],
-                            "Action": [
-                              "s3:*"
-                            ],
-                            "Condition": {
-                              "Bool": {
-                                "aws:SecureTransport": "true"
-                              }
+                          "Effect": "Allow",
+                          "Resource": [
+                            "arn:aws:dynamodb:us-east-1:123456789012:table/my-table"
+                          ]
+                        },
+                        {
+                          "Action": [
+                            "s3:*"
+                          ],
+                          "Condition": {
+                            "Bool": {
+                              "aws:SecureTransport": "true"
                             }
                           },
-                          {
-                            "Effect": "Deny",
-                            "Resource": [
-                              "*"
-                            ],
-                            "Action": [
-                              "dynamodb:DeleteTable",
-                              "s3:DeleteBucket"
-                            ],
-                            "Condition": {
-                              "Bool": {
-                                "aws:SecureTransport": "true"
-                              }
+                          "Effect": "Allow",
+                          "Resource": [
+                            "arn:aws:s3:::my-s3-development"
+                          ]
+                        },
+                        {
+                          "Action": [
+                            "dynamodb:DeleteTable",
+                            "s3:DeleteBucket"
+                          ],
+                          "Condition": {
+                            "Bool": {
+                              "aws:SecureTransport": "true"
                             }
-                          }
-                        ],
-                        "Version": "2012-10-17"
-                      }
+                          },
+                          "Effect": "Deny",
+                          "Resource": [
+                            "*"
+                          ]
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    }
 
       OUT
     end
@@ -353,10 +353,9 @@ describe TerraformLandscape::TerraformPlan do
 
       it { should == normalize_indent(<<-OUT) }
         ~ aws_iam_policy.my-user-test
-            policy:   "Effect": "Allow",
-                             "Resource": [
-                               "arn:aws:dynamodb:us-east-1:123456789012:table/my-user-test"
-                             ],
+            policy:   {
+                         "Statement": [
+                           {
                              "Action": [
                       -        "dynamodb:*"
                       +        "dynamodb:*",
@@ -366,19 +365,19 @@ describe TerraformLandscape::TerraformPlan do
                                "Bool": {
                                  "aws:SecureTransport": "true"
                                }
-                             }
-                           },
-                           {
+                                 "aws:SecureTransport": "true"
+                               }
+                             },
                              "Effect": "Allow",
                              "Resource": [
                       -        "arn:aws:s3:::my-s3-development",
                       -        "arn:aws:s3:::my-s3-development/*"
                       +        "arn:aws:s3:::my-s3-development"
-                             ],
+                             ]
+                           },
+                           {
                              "Action": [
-                               "s3:*"
-                             ],
-                             "Condition": {
+                               "dynamodb:DeleteTable",
 
       OUT
     end
