@@ -1,5 +1,8 @@
 # Terraform Landscape
 
+[![Gem Version](https://badge.fury.io/rb/terraform_landscape.svg)](http://badge.fury.io/rb/terraform_landscape)
+[![CircleCI](https://circleci.com/gh/coinbase/terraform-landscape.svg?style=svg)](https://circleci.com/gh/coinbase/terraform-landscape)
+
 Terraform Landscape is a tool for reformatting the output of `terraform plan`
 to be easier to read and understand.
 
