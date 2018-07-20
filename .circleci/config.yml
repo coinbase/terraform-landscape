@@ -34,6 +34,10 @@ jobs:
                             --format RspecJunitFormatter \
                             --out /tmp/test-results/rspec.xml \
 
+      - run:
+          name: rubocop
+          command: bundle exec rubocop -D
+
       - store_test_results:
           path: /tmp/test-results
       - store_artifacts:
