@@ -8,9 +8,10 @@ module TerraformLandscape
       @output = output
     end
 
-    def process_stream(io) # rubocop:disable Metrics/MethodLength
+    def process_stream(io, options = {}) # rubocop:disable Metrics/MethodLength
       apply = nil
       buffer = StringIO.new
+      original_tf_output = StringIO.new
       begin
         block_size = 1024
 
@@ -21,7 +22,9 @@ module TerraformLandscape
 
           readable_fds.each do |f|
             begin
-              buffer << strip_ansi(f.read_nonblock(block_size))
+              new_output = f.read_nonblock(block_size)
+              original_tf_output << new_output
+              buffer << strip_ansi(new_output)
             rescue IO::WaitReadable # rubocop:disable Lint/HandleExceptions
               # Ignore; we'll call IO.select again
             rescue EOFError
@@ -32,9 +35,19 @@ module TerraformLandscape
           apply = apply_prompt(buffer.string)
           done = true if apply
         end
-        process_string(buffer.string)
 
-        @output.print apply if apply
+        begin
+          process_string(buffer.string)
+          @output.print apply if apply
+        rescue ParseError, TerraformPlan::ParseError => e
+          if options[:fallback]
+            @output.warning FALLBACK_MESSAGE
+            @output.print original_tf_output.string
+          else
+            raise e
+          end
+        end
+
         @output.write_from(io)
       ensure
         io.close

@@ -30,9 +30,10 @@ module TerraformLandscape
 
     def define_commands
       command :print do |c|
-        c.action do
-          print
+        c.action do |args, options|
+          print(options.__hash__)
         end
+        c.option '--fallback', 'Fallback on original Terraform output when an error occurs while parsing'
       end
 
       global_option '--no-color', 'Do not output any color' do
@@ -43,9 +44,9 @@ module TerraformLandscape
       default_command :print
     end
 
-    def print
+    def print(options)
       printer = Printer.new(@output)
-      printer.process_stream(STDIN)
+      printer.process_stream(STDIN, options)
     end
   end
 end

@@ -299,5 +299,16 @@ describe TerraformLandscape::Printer do
         process.join
       end
     end
+
+    it "falls back on the original Terraform output when a ParseError occurs and the fallback option is provided" do
+      terraform_output = "gibberishhsirebbiggibberish"
+      outstream, instream = IO.pipe
+      terraform_output.split("\n").each do |line|
+        instream.puts(line)
+      end
+      instream.close
+      printer.process_stream(outstream, {:fallback => true})
+      should == TerraformLandscape::FALLBACK_MESSAGE + "\n" + terraform_output + "\n"
+    end
   end
 end
