@@ -42,7 +42,7 @@ describe TerraformLandscape::Printer do
       TXT
 
       it { should == normalize_indent(<<-OUT) }
-        No changes
+        No changes.
       OUT
     end
 
@@ -63,7 +63,7 @@ describe TerraformLandscape::Printer do
       TXT
 
       it { should == normalize_indent(<<-OUT) }
-        No changes
+        No changes.
       OUT
     end
 
@@ -180,7 +180,7 @@ describe TerraformLandscape::Printer do
       TXT
 
       it { should == normalize_indent(<<-OUT) }
-        No changes
+        No changes.
       OUT
     end
 
@@ -209,7 +209,7 @@ describe TerraformLandscape::Printer do
       TXT
 
       it { should == normalize_indent(<<-OUT) }
-        No changes
+        No changes.
       OUT
     end
   end

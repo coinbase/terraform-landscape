@@ -59,8 +59,8 @@ module TerraformLandscape
         scrubbed_output = scrubbed_output[match.end(0)..-1]
       elsif (match = scrubbed_output.match(/^\s*(~|\+|\-)/))
         scrubbed_output = scrubbed_output[match.begin(0)..-1]
-      elsif scrubbed_output =~ /^(No changes|This plan does nothing)/
-        @output.puts 'No changes'
+      elsif scrubbed_output =~ /^(No changes\.|This plan does nothing)/
+        @output.puts 'No changes.'
         return
       else
         raise ParseError, 'Output does not contain proper preface'
