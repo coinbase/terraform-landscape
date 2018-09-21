@@ -29,7 +29,7 @@ module TerraformLandscape
             end
           end
 
-          apply = apply_prompt(buffer.string)
+          apply = apply_prompt(buffer.string.encode('UTF-8', invalid: :replace, replace: ''))
           done = true if apply
         end
         process_string(buffer.string)
