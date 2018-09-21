@@ -44,6 +44,15 @@ Pipe the output of `terraform plan` into `landscape` to reformat the output.
 terraform plan ... | landscape
 ```
 
+## Docker
+
+Build the docker image using provided Dockerfile and use it directly:
+
+```bash
+docker build . -t landscape
+terraform plan ... | docker run landscape
+```
+
 ## License
 
 This project is released under the [Apache 2.0 license](LICENSE).
