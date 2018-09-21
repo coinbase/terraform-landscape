@@ -85,7 +85,7 @@ module TerraformLandscape
 
     def apply_prompt(output)
       return unless output =~ /Enter a value:\s+$/
-      output[/Do you want to perform these actions\?.*$/m, 0]
+      output[/Do you want to perform these actions.*$/m, 0]
     end
   end
 end
