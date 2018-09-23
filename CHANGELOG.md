@@ -1,5 +1,11 @@
 # Terraform Landscape Change Log
 
+## 0.2.1
+
+* Include period after `No changes` to maximize output compatibility
+* Fix output parser to work with Terraform workspaces
+* Fix output parser to work around multi-byte UTF-8 characters in certain scenarios
+
 ## 0.2.0
 
 * Sort JSON by keys before generating diff
