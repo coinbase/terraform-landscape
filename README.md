@@ -50,7 +50,7 @@ Build the docker image using provided Dockerfile and use it directly:
 
 ```bash
 docker build . -t landscape
-terraform plan ... | docker run --rm landscape
+terraform plan ... | docker run -i --rm landscape
 ```
 
 ## License
