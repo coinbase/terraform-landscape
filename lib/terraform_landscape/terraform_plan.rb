@@ -180,7 +180,7 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     # `eval` to obtain a hash with a single key/value.
     old, new = eval("{#{attribute_value}}").to_a.first # rubocop:disable Security/Eval
 
-    return if old == new # Don't show unchanged attributes
+    return if old == new && new != '<sensitive>' # Don't show unchanged attributes
 
     @out.print "    #{attribute_name}:".ljust(attribute_value_indent_amount, ' ')
                                        .colorize(change_color)

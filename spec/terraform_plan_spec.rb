@@ -412,6 +412,19 @@ describe TerraformLandscape::TerraformPlan do
       OUT
     end
 
+    context 'when changed sensitive output is included without quotes' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+        ~ some_resource_type.some_resource_name
+            value: <sensitive> => <sensitive> (attribute changed)
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+        ~ some_resource_type.some_resource_name
+            value:   "<sensitive>" => "<sensitive>" (attribute changed)
+
+      OUT
+    end
+
     context 'when generic bracketed output is included without quotes' do
       let(:terraform_output) { normalize_indent(<<-TXT) }
         + some_resource_type.some_resource_name
