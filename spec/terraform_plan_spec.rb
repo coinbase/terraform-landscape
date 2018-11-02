@@ -456,5 +456,28 @@ describe TerraformLandscape::TerraformPlan do
 
       OUT
     end
+
+    context 'when resource contains a list of key-value-pairs' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+        + some_resource_type.some_resource_name
+            some_attribute_name: "[{\"environment\": [{\"name\":\"c\",\"value\":\"300\"},{\"name\":\"b\",\"value\":\"200\"},{\"name\":\"a\",\"value\":\"100\"}] } ]" => "[{\"environment\": [{\"name\":\"a\",\"value\":\"100\"},{\"name\":\"c\",\"value\":\"300\"},{\"name\":\"b\",\"value\":\"205\"}] } ]"
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+        ~ some_resource_type.some_resource_name
+            some_attribute_name:   "name": "a",
+                                            "value": "100"
+                                          },
+                                          {
+                                            "name": "b",
+                                   -        "value": "200"
+                                   +        "value": "205"
+                                          },
+                                          {
+                                            "name": "c",
+                                            "value": "300"
+                                          }
+      OUT
+    end
   end
 end
