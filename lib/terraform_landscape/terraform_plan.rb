@@ -124,8 +124,8 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
   def recursive_sort(obj)
     case obj
     when Array
-      # If the array is equivalent to a dictionary, sort it by the key (in this case
-      # "name"), to improve the "diff" quality
+      # If the array is equivalent to a hash (aka "dictionary"), sort it by the
+      # key (in this case "name"), to improve the "diff" quality
       if (obj.all? { |item| (item.is_a?(Hash)) and (item.has_key? "name") })
         ret = obj.sort_by { |hsh| hsh["name"] }
       else
