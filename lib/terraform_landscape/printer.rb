@@ -54,6 +54,13 @@ module TerraformLandscape
       # Remove separation lines that appear after refreshing state
       scrubbed_output.gsub!(/^-+$/, '')
 
+      if (matches = scrubbed_output.scan(/^Warning:.*$/))
+        for warning in matches
+          @output.puts warning.colorize(:yellow)
+        end
+        @output.newline
+      end
+
       # Remove preface
       if (match = scrubbed_output.match(/^Path:[^\n]+/))
         scrubbed_output = scrubbed_output[match.end(0)..-1]
