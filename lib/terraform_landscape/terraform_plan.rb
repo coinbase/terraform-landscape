@@ -177,7 +177,7 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     attribute_value_indent_amount
   )
     # Since the attribute line is always of the form "old value" => "new value"
-    attribute_value =~ /^ *"(.*)" *=> *"(.*)" *$/
+    attribute_value =~ /^ *(".*") *=> *(".*") *$/
     old = $1.undump
     new = $2.undump
 
