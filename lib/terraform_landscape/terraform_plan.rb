@@ -168,7 +168,8 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def display_modified_attribute( # rubocop:disable Metrics/ParameterLists
+  # rubocop:disable Metrics/ParameterLists, Metrics/MethodLength
+  def display_modified_attribute(
     change_color,
     attribute_name,
     attribute_value,
@@ -178,8 +179,8 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
   )
     # Since the attribute line is always of the form "old value" => "new value"
     attribute_value =~ /^ *(".*") *=> *(".*") *$/
-    old = $1.undump
-    new = $2.undump
+    old = Regexp.last_match[1].undump
+    new = Regexp.last_match[2].undump
 
     return if old == new && new != '<sensitive>' # Don't show unchanged attributes
 
