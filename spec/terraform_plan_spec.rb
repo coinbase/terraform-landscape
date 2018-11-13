@@ -456,31 +456,5 @@ describe TerraformLandscape::TerraformPlan do
 
       OUT
     end
-
-    context 'when added resource contains an attribute with ruby string interpolation' do
-      let(:terraform_output) { normalize_indent(<<-TXT) }
-        + some_resource_type.some_resource_name
-            some_attribute_name:    "\#{host}"
-      TXT
-
-      it { should == normalize_indent(<<-OUT) }
-        + some_resource_type.some_resource_name
-            some_attribute_name:   "\#{host}"
-
-      OUT
-    end
-
-    context 'when output contains a single resoruce with ruby string interpolation' do
-      let(:terraform_output) { normalize_indent(<<-TXT) }
-        ~ some_resource_type.some_resource_name
-            some_attribute_name:    "\#{host}" => "\#{path}"
-      TXT
-
-      it { should == normalize_indent(<<-OUT) }
-        ~ some_resource_type.some_resource_name
-            some_attribute_name:   "\#{host}" => "\#{path}"
-
-      OUT
-    end
   end
 end

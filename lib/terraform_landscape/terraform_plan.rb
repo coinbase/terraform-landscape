@@ -2,7 +2,6 @@ require 'colorize'
 require 'diffy'
 require 'json'
 require 'treetop'
-require 'string_undump'
 
 ########################################################################
 # Represents the parsed output of `terraform plan`.
@@ -176,10 +175,10 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     attribute_value_indent,
     attribute_value_indent_amount
   )
-    # Since the attribute line is always of the form "old value" => "new value"
-    attribute_value =~ /^ *"(.*)" *=> *"(.*)" *$/
-    old = $1.undump
-    new = $2.undump
+    # Since the attribute line is always of the form
+    # "old value" => "new value", we can add curly braces and parse with
+    # `eval` to obtain a hash with a single key/value.
+    old, new = eval("{#{attribute_value}}").to_a.first # rubocop:disable Security/Eval
 
     return if old == new && new != '<sensitive>' # Don't show unchanged attributes
 
@@ -218,7 +217,7 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     @out.print "    #{attribute_name}:".ljust(attribute_value_indent_amount, ' ')
                                        .colorize(change_color)
 
-    evaluated_string = attribute_value.undump
+    evaluated_string = eval(attribute_value) # rubocop:disable Security/Eval
     if json?(evaluated_string)
       @out.print to_pretty_json(evaluated_string).gsub("\n",
                                                        "\n#{attribute_value_indent}")
