@@ -58,7 +58,6 @@ module TerraformLandscape
         for warning in matches
           @output.puts warning.colorize(:yellow)
         end
-        @output.newline
       end
 
       # Remove preface
