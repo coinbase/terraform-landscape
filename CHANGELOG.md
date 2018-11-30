@@ -1,5 +1,11 @@
 # Terraform Landscape Change Log
 
+## 0.2.2
+
+* Fix output parser to show changed sensitive values
+* Fix plan parser to not extract attributes using `eval`
+* Include warning messages in output
+
 ## 0.2.1
 
 * Include period after `No changes` to maximize output compatibility
