@@ -8,9 +8,10 @@ module TerraformLandscape
       @output = output
     end
 
-    def process_stream(io) # rubocop:disable Metrics/MethodLength
+    def process_stream(io, options = {}) # rubocop:disable Metrics/MethodLength
       apply = nil
       buffer = StringIO.new
+      original_tf_output = StringIO.new
       begin
         block_size = 1024
 
@@ -21,7 +22,9 @@ module TerraformLandscape
 
           readable_fds.each do |f|
             begin
-              buffer << strip_ansi(f.read_nonblock(block_size))
+              new_output = f.read_nonblock(block_size)
+              original_tf_output << new_output
+              buffer << strip_ansi(new_output)
             rescue IO::WaitReadable # rubocop:disable Lint/HandleExceptions
               # Ignore; we'll call IO.select again
             rescue EOFError
@@ -29,14 +32,22 @@ module TerraformLandscape
             end
           end
 
-          apply = apply_prompt(buffer.string.encode('UTF-8',
-                                                    invalid: :replace,
-                                                    replace: ''))
+          apply = apply_prompt(buffer.string)
           done = true if apply
         end
-        process_string(buffer.string)
 
-        @output.print apply if apply
+        begin
+          process_string(buffer.string)
+          @output.print apply if apply
+        rescue ParseError, TerraformPlan::ParseError => e
+          if options[:fallback]
+            @output.warning FALLBACK_MESSAGE
+            @output.print original_tf_output.string
+          else
+            raise e
+          end
+        end
+
         @output.write_from(io)
       ensure
         io.close
@@ -54,12 +65,6 @@ module TerraformLandscape
       # Remove separation lines that appear after refreshing state
       scrubbed_output.gsub!(/^-+$/, '')
 
-      if (matches = scrubbed_output.scan(/^Warning:.*$/))
-        matches.each do |warning|
-          @output.puts warning.colorize(:yellow)
-        end
-      end
-
       # Remove preface
       if (match = scrubbed_output.match(/^Path:[^\n]+/))
         scrubbed_output = scrubbed_output[match.end(0)..-1]
@@ -67,8 +72,8 @@ module TerraformLandscape
         scrubbed_output = scrubbed_output[match.end(0)..-1]
       elsif (match = scrubbed_output.match(/^\s*(~|\+|\-)/))
         scrubbed_output = scrubbed_output[match.begin(0)..-1]
-      elsif scrubbed_output =~ /^(No changes\.|This plan does nothing)/
-        @output.puts 'No changes.'
+      elsif scrubbed_output =~ /^(No changes|This plan does nothing)/
+        @output.puts 'No changes'
         return
       else
         raise ParseError, 'Output does not contain proper preface'
@@ -93,7 +98,7 @@ module TerraformLandscape
 
     def apply_prompt(output)
       return unless output =~ /Enter a value:\s+$/
-      output[/Do you want to perform these actions.*$/m, 0]
+      output[/Do you want to perform these actions\?.*$/m, 0]
     end
   end
 end
