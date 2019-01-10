@@ -34,9 +34,9 @@ module TerraformLandscape
           print(options.__hash__)
         end
         c.description = <<-TXT
-Pretty-prints your Terraform plan output.
+  Pretty-prints your Terraform plan output.
 
-If an error occurs while parsing the Terraform output, print will automatically fall back on the original Terraform output. To view the stack trace instead, provide the global --trace option.
+  If an error occurs while parsing the Terraform output, print will automatically fall back on the original Terraform output. To view the stack trace instead, provide the global --trace option.
         TXT
       end
 

@@ -40,12 +40,10 @@ module TerraformLandscape
           process_string(buffer.string)
           @output.print apply if apply
         rescue ParseError, TerraformPlan::ParseError => e
-          if options[:trace]
-            raise e
-          else
-            @output.warning FALLBACK_MESSAGE
-            @output.print original_tf_output.string
-          end
+          raise e if options[:trace]
+
+          @output.warning FALLBACK_MESSAGE
+          @output.print original_tf_output.string
         end
 
         @output.write_from(io)

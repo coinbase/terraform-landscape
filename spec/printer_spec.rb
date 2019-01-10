@@ -318,7 +318,8 @@ describe TerraformLandscape::Printer do
         instream.puts(line)
       end
       instream.close
-      expect { printer.process_stream(outstream, { trace: true }) }.to raise_error(TerraformLandscape::ParseError)
+      expect { printer.process_stream(outstream, { trace: true }) }
+        .to raise_error(TerraformLandscape::ParseError)
     end
   end
 end
