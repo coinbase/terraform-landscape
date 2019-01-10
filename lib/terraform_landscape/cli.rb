@@ -33,7 +33,11 @@ module TerraformLandscape
         c.action do |args, options|
           print(options.__hash__)
         end
-        c.option '--fallback', 'Fallback on original Terraform output when an error occurs while parsing'
+        c.description = <<-TXT
+Pretty-prints your Terraform plan output.
+
+If an error occurs while parsing the Terraform output, print will automatically fall back on the original Terraform output. To view the stack trace instead, provide the global --trace option.
+TXT
       end
 
       global_option '--no-color', 'Do not output any color' do
