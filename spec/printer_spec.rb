@@ -300,8 +300,8 @@ describe TerraformLandscape::Printer do
       end
     end
 
-    it "falls back on the original Terraform output when a ParseError occurs" do
-      terraform_output = "gibberishhsirebbiggibberish"
+    it 'falls back on the original Terraform output when a ParseError occurs' do
+      terraform_output = 'gibberishhsirebbiggibberish'
       outstream, instream = IO.pipe
       terraform_output.split("\n").each do |line|
         instream.puts(line)
@@ -311,14 +311,14 @@ describe TerraformLandscape::Printer do
       should == TerraformLandscape::FALLBACK_MESSAGE + "\n" + terraform_output + "\n"
     end
 
-    it "returns stack trace when a ParseError occurs and the trace option is provided" do
-      terraform_output = "gibberishhsirebbiggibberish"
+    it 'returns stack trace when a ParseError occurs and the trace option is provided' do
+      terraform_output = 'gibberishhsirebbiggibberish'
       outstream, instream = IO.pipe
       terraform_output.split("\n").each do |line|
         instream.puts(line)
       end
       instream.close
-      expect { printer.process_stream(outstream, {:trace => true}) }.to raise_error(TerraformLandscape::ParseError)
+      expect { printer.process_stream(outstream, { trace: true }) }.to raise_error(TerraformLandscape::ParseError)
     end
   end
 end
