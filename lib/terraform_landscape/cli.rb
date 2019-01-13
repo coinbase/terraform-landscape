@@ -30,9 +30,14 @@ module TerraformLandscape
 
     def define_commands
       command :print do |c|
-        c.action do
-          print
+        c.action do |_args, options|
+          print(options.__hash__)
         end
+        c.description = <<-TXT
+  Pretty-prints your Terraform plan output.
+
+  If an error occurs while parsing the Terraform output, print will automatically fall back on the original Terraform output. To view the stack trace instead, provide the global --trace option.
+        TXT
       end
 
       global_option '--no-color', 'Do not output any color' do
@@ -43,9 +48,9 @@ module TerraformLandscape
       default_command :print
     end
 
-    def print
+    def print(options)
       printer = Printer.new(@output)
-      printer.process_stream(STDIN)
+      printer.process_stream(STDIN, options)
     end
   end
 end
