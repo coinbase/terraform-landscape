@@ -20,11 +20,10 @@ Gem::Specification.new do |s|
                             Dir['lib/**/*.rb'] +
                             Dir['grammar/**/*.treetop']
 
-  s.required_ruby_version = '>= 2'
+  s.required_ruby_version = '>= 2.5'
 
   s.add_dependency 'colorize',      '~> 0.7'
   s.add_dependency 'commander',     '~> 4.4'
   s.add_dependency 'diffy',         '~> 3.0'
-  s.add_dependency 'string_undump', '~> 0.1.1'
   s.add_dependency 'treetop',       '~> 1.6'
 end

@@ -2,7 +2,6 @@ require 'colorize'
 require 'diffy'
 require 'json'
 require 'treetop'
-require 'string_undump'
 
 ########################################################################
 # Represents the parsed output of `terraform plan`.
