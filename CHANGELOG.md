@@ -1,5 +1,12 @@
 # Terraform Landscape Change Log
 
+## master (unreleased)
+
+* Display original Terraform output when Landscape encounters an unhandled exception
+* Drop dependency on `string_undump` gem in favor of built in `String#undump` method
+  introduced in Ruby 2.5
+* Require Ruby 2.5 or newer
+
 ## 0.2.2
 
 * Fix output parser to show changed sensitive values
