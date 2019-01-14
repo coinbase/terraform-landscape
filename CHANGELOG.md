@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.3.0
 
 * Display original Terraform output when Landscape encounters an unhandled exception
 * Drop dependency on `string_undump` gem in favor of built in `String#undump` method
