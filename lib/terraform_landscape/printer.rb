@@ -1,7 +1,7 @@
 require 'stringio'
 
 module TerraformLandscape
-  # Takes output from Terraform executable nad outputs it in a prettified
+  # Takes output from Terraform executable and outputs it in a prettified
   # format.
   class Printer
     def initialize(output)
@@ -59,8 +59,10 @@ module TerraformLandscape
 
       # Remove initialization messages like
       # "- Downloading plugin for provider "aws" (1.1.0)..."
+      # "- module.base_network"
       # as these break the parser which thinks "-" is a resource deletion
       scrubbed_output.gsub!(/^- .*\.\.\.$/, '')
+      scrubbed_output.gsub!(/^- module\..*$/, '')
 
       # Remove separation lines that appear after refreshing state
       scrubbed_output.gsub!(/^-+$/, '')
