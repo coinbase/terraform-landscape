@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.3.1
 
 * Fix handling of initialization messages for included modules
 
