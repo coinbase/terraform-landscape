@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## master (unreleased)
+
+* Fix handling of initialization messages for included modules
+
 ## 0.3.0
 
 * Display original Terraform output when Landscape encounters an unhandled exception
