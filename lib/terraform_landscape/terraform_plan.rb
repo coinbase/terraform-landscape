@@ -2,6 +2,7 @@ require 'colorize'
 require 'diffy'
 require 'json'
 require 'treetop'
+require 'base64'
 
 ########################################################################
 # Represents the parsed output of `terraform plan`.
@@ -107,6 +108,10 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
       (JSON.parse(value) rescue nil) # rubocop:disable Style/RescueModifier
   end
 
+  def base64?(value)
+    value.is_a?(String) && Base64.strict_encode64(Base64.decode64(value)) == value
+  end
+
   def to_pretty_json(value)
     # Can't JSON.parse an empty string, so handle it separately
     return '' if value.strip.empty?
@@ -194,6 +199,10 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     elsif old.include?("\n") || new.include?("\n")
       # Multiline content, so display nicer diff
       display_diff("#{old}\n", "#{new}\n", attribute_value_indent)
+    elsif(attribute_name == 'user_data' && base64?(new))
+      decoded_old = Base64.decode64(old)
+      decoded_new = Base64.decode64(new)
+      display_diff(decoded_old, decoded_new, attribute_value_indent)
     else
       # Typical values, so just show before/after
       @out.print '"' + old.colorize(:red) + '"'
