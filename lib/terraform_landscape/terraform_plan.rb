@@ -25,7 +25,7 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
   DEFAULT_DIFF_CONTEXT_LINES = 5
 
   UNICODE_ESCAPER = proc { |s|
-    format('\u%X', s.codepoints[0])
+    format('\u%04X', s.codepoints[0])
   }
 
   class ParseError < StandardError; end
