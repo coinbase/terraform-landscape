@@ -25,8 +25,8 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
 
   DEFAULT_DIFF_CONTEXT_LINES = 5
 
-  UNICODE_ESCAPER = Proc.new { |s|
-    sprintf("\\u%X", s.codepoints[0])
+  UNICODE_ESCAPER = proc { |s|
+    format('\u%X', s.codepoints[0])
   }
 
   class ParseError < StandardError; end
@@ -108,7 +108,7 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
   end
 
   def undump(value)
-    value.encode("ASCII", fallback: UNICODE_ESCAPER).undump
+    value.encode('ASCII', fallback: UNICODE_ESCAPER).undump
   end
 
   def json?(value)
