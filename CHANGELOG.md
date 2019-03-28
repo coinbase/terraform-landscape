@@ -1,5 +1,22 @@
 # Terraform Landscape Change Log
 
+## 0.3.1
+
+* Fix handling of initialization messages for included modules
+
+## 0.3.0
+
+* Display original Terraform output when Landscape encounters an unhandled exception
+* Drop dependency on `string_undump` gem in favor of built in `String#undump` method
+  introduced in Ruby 2.5
+* Require Ruby 2.5 or newer
+
+## 0.2.2
+
+* Fix output parser to show changed sensitive values
+* Fix plan parser to not extract attributes using `eval`
+* Include warning messages in output
+
 ## 0.2.1
 
 * Include period after `No changes` to maximize output compatibility

@@ -18,7 +18,7 @@ to be easier to read and understand.
 
 ## Requirements
 
-* Ruby 2+
+* Ruby 2.5+
 
 ## Installation
 

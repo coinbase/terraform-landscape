@@ -483,7 +483,7 @@ describe TerraformLandscape::TerraformPlan do
       OUT
     end
 
-    context 'when output contains a single resoruce with ruby string interpolation' do
+    context 'when output contains a single resource with ruby string interpolation' do
       let(:terraform_output) { normalize_indent(<<-TXT) }
         ~ some_resource_type.some_resource_name
             some_attribute_name:    "\#{host}" => "\#{path}"

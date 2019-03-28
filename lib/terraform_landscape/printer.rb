@@ -1,16 +1,17 @@
 require 'stringio'
 
 module TerraformLandscape
-  # Takes output from Terraform executable nad outputs it in a prettified
+  # Takes output from Terraform executable and outputs it in a prettified
   # format.
   class Printer
     def initialize(output)
       @output = output
     end
 
-    def process_stream(io) # rubocop:disable Metrics/MethodLength
+    def process_stream(io, options = {}) # rubocop:disable Metrics/MethodLength
       apply = nil
       buffer = StringIO.new
+      original_tf_output = StringIO.new
       begin
         block_size = 1024
 
@@ -21,7 +22,9 @@ module TerraformLandscape
 
           readable_fds.each do |f|
             begin
-              buffer << strip_ansi(f.read_nonblock(block_size))
+              new_output = f.read_nonblock(block_size)
+              original_tf_output << new_output
+              buffer << strip_ansi(new_output)
             rescue IO::WaitReadable # rubocop:disable Lint/HandleExceptions
               # Ignore; we'll call IO.select again
             rescue EOFError
@@ -34,9 +37,17 @@ module TerraformLandscape
                                                     replace: ''))
           done = true if apply
         end
-        process_string(buffer.string)
 
-        @output.print apply if apply
+        begin
+          process_string(buffer.string)
+          @output.print apply if apply
+        rescue ParseError, TerraformPlan::ParseError => e
+          raise e if options[:trace]
+
+          @output.warning FALLBACK_MESSAGE
+          @output.print original_tf_output.string
+        end
+
         @output.write_from(io)
       ensure
         io.close
@@ -48,11 +59,19 @@ module TerraformLandscape
 
       # Remove initialization messages like
       # "- Downloading plugin for provider "aws" (1.1.0)..."
+      # "- module.base_network"
       # as these break the parser which thinks "-" is a resource deletion
       scrubbed_output.gsub!(/^- .*\.\.\.$/, '')
+      scrubbed_output.gsub!(/^- module\..*$/, '')
 
       # Remove separation lines that appear after refreshing state
       scrubbed_output.gsub!(/^-+$/, '')
+
+      if (matches = scrubbed_output.scan(/^Warning:.*$/))
+        matches.each do |warning|
+          @output.puts warning.colorize(:yellow)
+        end
+      end
 
       # Remove preface
       if (match = scrubbed_output.match(/^Path:[^\n]+/))
