@@ -24,6 +24,10 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
 
   DEFAULT_DIFF_CONTEXT_LINES = 5
 
+  UNICODE_ESCAPER = proc { |s|
+    format('\u%04X', s.codepoints[0])
+  }
+
   class ParseError < StandardError; end
 
   class << self
@@ -102,6 +106,10 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     longest_name_length + 8
   end
 
+  def undump(value)
+    value.encode('ASCII', fallback: UNICODE_ESCAPER).undump
+  end
+
   def json?(value)
     ['{', '['].include?(value.to_s[0]) &&
       (JSON.parse(value) rescue nil) # rubocop:disable Style/RescueModifier
@@ -178,8 +186,8 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
   )
     # Since the attribute line is always of the form "old value" => "new value"
     attribute_value =~ /^ *(".*") *=> *(".*") *$/
-    old = Regexp.last_match[1].undump
-    new = Regexp.last_match[2].undump
+    old = undump(Regexp.last_match[1])
+    new = undump(Regexp.last_match[2])
 
     return if old == new && new != '<sensitive>' # Don't show unchanged attributes
 
@@ -218,7 +226,7 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     @out.print "    #{attribute_name}:".ljust(attribute_value_indent_amount, ' ')
                                        .colorize(change_color)
 
-    evaluated_string = attribute_value.undump
+    evaluated_string = undump(attribute_value)
     if json?(evaluated_string)
       @out.print to_pretty_json(evaluated_string).gsub("\n",
                                                        "\n#{attribute_value_indent}")
