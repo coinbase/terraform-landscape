@@ -1,6 +1,6 @@
 # Terraform Landscape Change Log
 
-## master (unreleased)
+## 0.3.2
 
 * Fix handling of UTF-8 strings in Terraform plans
 
