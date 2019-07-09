@@ -129,13 +129,20 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
                          })
   end
 
-  def recursive_sort(obj)
+  def recursive_sort(obj, array_sort = false)
     case obj
     when Array
-      obj.map { |item| recursive_sort(item) }
+      if !obj.empty? && obj[0].is_a?(Hash) &&
+         obj[0].key?('role') && obj[0].key?('members')
+        obj.sort_by { |v| v['role'] } .map { |item| recursive_sort(item, true) }
+      elsif array_sort
+        obj.sort.map { |item| recursive_sort(item) }
+      else
+        obj.map { |item| recursive_sort(item) }
+      end
     when Hash
       obj.keys.sort.each_with_object({}) do |key, hash|
-        hash[key] = recursive_sort(obj[key])
+        hash[key] = recursive_sort(obj[key], array_sort)
       end
     else
       obj
