@@ -41,6 +41,19 @@ describe TerraformLandscape::TerraformPlan do
       OUT
     end
 
+    context 'when output contains a single resource with one UTF-8 attribute' do
+      let(:terraform_output) { normalize_indent(<<-TXT) }
+        ~ some_resource_type.some_resource_name
+            some_attribute_name:    "3" => "こんにちは"
+      TXT
+
+      it { should == normalize_indent(<<-OUT) }
+        ~ some_resource_type.some_resource_name
+            some_attribute_name:   "3" => "こんにちは"
+
+      OUT
+    end
+
     context 'when output contains a resource with an index number' do
       let(:terraform_output) { normalize_indent(<<-TXT) }
         + some_resource_type.some_resource_name.0

@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## 0.3.2
+
+* Fix handling of UTF-8 strings in Terraform plans
+
 ## 0.3.1
 
 * Fix handling of initialization messages for included modules
