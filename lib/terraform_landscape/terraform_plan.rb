@@ -207,7 +207,7 @@ class TerraformLandscape::TerraformPlan # rubocop:disable Metrics/ClassLength
     elsif old.include?("\n") || new.include?("\n")
       # Multiline content, so display nicer diff
       display_diff("#{old}\n", "#{new}\n", attribute_value_indent)
-    elsif(attribute_name == 'user_data' && base64?(new))
+    elsif attribute_name == 'user_data' && base64?(new)
       decoded_old = Base64.decode64(old)
       decoded_new = Base64.decode64(new)
       display_diff(decoded_old, decoded_new, attribute_value_indent)
