@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## 0.3.3
+
+* Fix handling of Windows newlines in preprocessing step
+
 ## 0.3.2
 
 * Fix handling of UTF-8 strings in Terraform plans
