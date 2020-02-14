@@ -50,7 +50,7 @@ module TerraformLandscape
 
     def print(options)
       printer = Printer.new(@output)
-      printer.process_stream(STDIN, options)
+      printer.process_stream(ARGF, options)
     end
   end
 end
