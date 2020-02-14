@@ -57,6 +57,9 @@ module TerraformLandscape
     def process_string(plan_output) # rubocop:disable Metrics/MethodLength
       scrubbed_output = strip_ansi(plan_output)
 
+      # Our grammar assumes output with Unix line endings
+      scrubbed_output.gsub!("\r\n", "\n")
+
       # Remove initialization messages like
       # "- Downloading plugin for provider "aws" (1.1.0)..."
       # "- module.base_network"
