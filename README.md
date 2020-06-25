@@ -19,6 +19,7 @@ to be easier to read and understand.
 ## Requirements
 
 * Ruby 2.5+
+* Terraform 0.11.x (see [#101](https://github.com/coinbase/terraform-landscape/issues/101) for details)
 
 ## Installation
 
