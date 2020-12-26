@@ -38,7 +38,7 @@ grammar TerraformPlan
   end
 
   rule resource_header
-    _? change:('~' / '-/+' / '-' / '+' / '<=') _ type:[a-zA-Z0-9_-]+ '.' name:[\S]+ _ '(' reason1:[^)]+ ')' _ '(' reason2:[^)]+ ')' {
+    ws? change:('~' / '-/+' / '-' / '+' / '<=') ws type:[a-zA-Z0-9_-]+ '.' name:[\S]+ ws '(' reason1:[^)]+ ')' ws '(' reason2:[^)]+ ')' {
       def to_ast
         {
           change: change.text_value.to_sym,
@@ -50,7 +50,7 @@ grammar TerraformPlan
       end
     }
     /
-    _? change:('~' / '-/+' / '-' / '+' / '<=') _ type:[a-zA-Z0-9_-]+ '.' name:[\S]+ _ '(' reason:[^)]+ ')' {
+    ws? change:('~' / '-/+' / '-' / '+' / '<=') ws type:[a-zA-Z0-9_-]+ '.' name:[\S]+ ws '(' reason:[^)]+ ')' {
       def to_ast
         {
           change: change.text_value.to_sym,
@@ -61,7 +61,7 @@ grammar TerraformPlan
       end
     }
     /
-    _? change:('~' / '-/+' / '-' / '+' / '<=') _ type:[a-zA-Z0-9_-]+ '.' name:[\S]+ {
+    ws? change:('~' / '-/+' / '-' / '+' / '<=') ws type:[a-zA-Z0-9_-]+ '.' name:[\S]+ {
       def to_ast
         {
           change: change.text_value.to_sym,
@@ -73,13 +73,13 @@ grammar TerraformPlan
   end
 
   rule attribute_list
-    _ item:attribute "\n" attrs:attribute_list {
+    ws item:attribute "\n" attrs:attribute_list {
       def to_ast
         item.to_ast.merge(attrs.to_ast)
       end
     }
     /
-    _ item:attribute {
+    ws item:attribute {
       def to_ast
         item.to_ast
       end
@@ -87,7 +87,7 @@ grammar TerraformPlan
   end
 
   rule attribute
-    attribute_name:(!': ' .)* ':' _? attribute_value:[^\n]+ {
+    attribute_name:(!': ' .)* ':' ws? attribute_value:[^\n]+ {
       def to_ast
         { attribute_name.text_value => sanitize_value_and_reason }
       end
@@ -115,7 +115,7 @@ grammar TerraformPlan
     }
   end
 
-  rule _
+  rule ws
     [ ]+
   end
 end
