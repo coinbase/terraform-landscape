@@ -1,5 +1,9 @@
 # Terraform Landscape Change Log
 
+## 0.3.4
+
+* Fix syntax errors when running on Ruby 3
+
 ## 0.3.3
 
 * Fix handling of Windows newlines in preprocessing step
